@@ -12,7 +12,7 @@
 	{
 		background: #888;
 		position: fixed; /* or absolute */
-		height: 220px;
+		height: 250px;
 		width: 420px;
 		top: 50%;
 		left: 50%;
@@ -91,7 +91,10 @@
 			<br><br>
 			<span class="error"><?php echo $genericErr;?></span><br>
 			<br>
-			<input type="submit" name="submit" value="Login">  
+			<input type="submit" name="submit" value="Login">
+			<br>
+			<br>
+			<a href='/create'>Need an account?</a>
 		</form>
 	</div>
 	</body>

@@ -8,20 +8,19 @@
 	session_start();
 	
 	if ( isset( $_SESSION['user_id'] ) ) {
-		echo '<div class="top-right"><a href="includes/logout.php">Logout</a></div>';
-		
-		echo '<a href="/rsa">RSA Settings</a>';
-		
-		echo '<br>';
-		
 		if ( isset( $_SESSION['user_level'] ) )  {
 			if( $_SESSION['user_level'] > 0 ) {
-				echo '<br><a href="/reports">Abuse Reports</a>';
+				echo '<a href="/reports">Abuse Reports</a>&nbsp;&nbsp;&nbsp;';
 			}
 		}
+		
+		echo '<div class="top-right">Welcome, <a href="/account">' . $_SESSION['user_name'] . '</a>&nbsp;&nbsp;&nbsp;
+			<a href="includes/logout.php">Logout</a>
+		</div>';
 	}
 	else {
-		echo '<div class="top-right"><a href="/login">Login</a></div>';
+		echo '<div class="top-right"><a href="/create">Create Account</a>&nbsp;&nbsp;&nbsp;
+			<a href="/login">Login</a></div>';
 	}
 ?>
 	</body>

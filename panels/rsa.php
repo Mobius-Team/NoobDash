@@ -1,28 +1,17 @@
-<!DOCTYPE HTML>  
-<html>
-	<head>
-	<link rel="stylesheet" type="text/css" href="/css/boring.css">
-	</head>
-	<body>
-		
 <?php
-	session_start();
-	
 	if ( isset( $_SESSION['user_id'] ) ) {
 		// Grab user data from the database using the user_id
 		// Let them access the "logged in only" pages
 		$agentID = $_SESSION['user_id'];
 	} 
 	else {
-		// Redirect them to the login page
-		header("Location: /login");
 		exit();
 	}
-?>
-	<div class="top-right"><a href='/includes/logout.php'>Logout</a></div>
-	<div><a href='/'>Back</a></div>
-<?php
+	
 	include "includes/rsamagic.php";
+	
+	$errorMessage = $successMessage = "";
+	$updatedInfo = FALSE;
 	
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$submittedKey = $_POST["rsaKey"];
@@ -38,49 +27,65 @@
 		else $disablePassword = 0;
 		
 		if (empty($submittedKey)) {
-			echo '<br><font color="red">Error: A key was not provided!</font>';
+			$errorMessage = 'Error: A key was not provided!';
 		} 
 		else
 		{
 			$success = changeRSASettings( $agentID, $submittedKey, $disablePassword );
 			
 			if( $success === TRUE )
-				echo '<br><font color="green">Settings updated successfully!</font>';
+				$updatedInfo = TRUE;
 			else
-				echo '<br><font color="red">' . $success . '</font>';
+				$errorMessage = $success;
 		}
 	}
 	
 	$rsaData = getRSAData( $agentID );
 	$rsaOnly = $rsaData["disable"];
 	$rsaKey = $rsaData["key"];
-	
-	echo '<br>';
-
-	if( !empty( $rsaKey ) && $rsaOnly != 1 )
-	{
-		echo '<font color="orange">Warning: Please make sure that you test that you can log in with your key before disabling password logins!</font><br>';
-	}
 ?>
-	<br>
+
+<div align="center">
+	<h4>RSA Login Settings</h4>
 	<form method="post" action="">  
 		<?php 
-		echo '<input type="checkbox" name="disable_password_check" value="1" ';
+		echo '<div style="width: 550px;" align="left">Public Key:</a></div>
+			<textarea name="rsaKey" style="width: 550px; height: 100px" rows="10" cols="80" ';
+		if( $rsaOnly == "1" )
+			echo 'disabled';
+		echo '>' . $rsaKey .'</textarea>';
+		
+		echo '<br>';
+		
+		echo '<br><input type="checkbox" name="disable_password_check" value="1" ';
 		if( $rsaOnly == "1" )
 			echo 'checked disabled';
 		echo '>Disable Password Login<br>';
 		
-		echo '<br>Public Key:<br><textarea name="rsaKey" style="width: 500px; height: 100px" rows="10" cols="80" ';
-		if( $rsaOnly == "1" )
-			echo 'disabled';
-		echo '>' . $rsaKey .'</textarea>';
-
+		echo '<br>';
+		
+		if( $updatedInfo )
+		{
+			echo '<font color="green">Settings updated successfully!</font><br>';
+		}
+		else if( $errorMessage != "" )
+		{
+			echo '<font color="red">' . $errorMessage . '</font><br>';
+		}
+		else echo '<br>';
+		
+		if( !empty( $rsaKey ) && $rsaOnly != 1 )
+		{
+			echo '<font color="orange">Warning: Please make sure that you test that you can log in with your key before disabling password logins!</font><br>';
+		}
+		else echo '<br>';
+		
 		echo '<br><br><input type="submit" name="submit" value="Update Settings" ';
 		if( $rsaOnly == "1" )
 			echo 'disabled';
 		echo '>';
 		?>
 	</form>
-	</body>
-	<footer class="footer">Copyright (c) 2019, Mobius Team<div class="bottom-right"><a href="https://github.com/Mobius-Team/">Mobius Team GitHub</a></div></footer>
-</html>
+	<p style="width: 80%;">
+	</p>
+</div>

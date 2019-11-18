@@ -40,6 +40,9 @@
 		return $data;
 	}
 	
+	echo '<div class="top-right">Welcome, <a href="/account">' . $_SESSION['user_name'] . '</a>&nbsp;&nbsp;&nbsp;
+			<a href="includes/logout.php">Logout</a>
+		</div>';
 	
 	$path = $_SERVER['REQUEST_URI'];
 	
@@ -53,8 +56,6 @@
 		exit();
 	}
 	
-	echo '<div class="top-right"><a href="/includes/logout.php">Logout</a></div>';
-		
 	if ($path == "/reports")
 	{
 		echo '<div><a href="/">Back</a></div>';
@@ -121,8 +122,8 @@
 				
 				$summary_parse = parse_summary( $summary );
 				
-				echo "<br><br>Summary: " . $summary_parse["summary"];
-				echo "<br><br>Details:<br>" . nl2br($details);
+				echo "<br><br>Summary: " . htmlspecialchars( $summary_parse["summary"] );
+				echo "<br><br>Details:<br>" . nl2br( htmlspecialchars( $details ) );
 				echo "<br><br>Version: " . $version;
 				echo "<br><br>";
 				
