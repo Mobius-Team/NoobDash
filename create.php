@@ -114,6 +114,7 @@
 				{
 					$_SESSION['user_id'] = $create_info;
 					$_SESSION['user_level'] = 0;
+					$_SESSION['user_name'] = $username;
 					
 					header("Location: " . WebsiteURL);
 					exit();
